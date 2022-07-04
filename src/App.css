@@ -50,12 +50,19 @@
     --system-toast-z-index: 4000;
 }
 
-body {
-    height: 100%;
+html {
+    height: 100vh;
+    background-color: black;
+}
+
+.app {
+    display: block;
+    height: 100vh;
     background-color: var(--color-background);
     margin: 0;
     padding: 0;
     overflow-y: hidden;
+
 }
 
 

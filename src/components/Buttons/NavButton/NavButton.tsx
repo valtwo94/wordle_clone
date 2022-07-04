@@ -14,7 +14,7 @@ const S = {
 }
 
 
-const Title:React.FC<NavButtonProps> = ({children, onClick}) => {
+const NavButton:React.FC<NavButtonProps> = ({children, onClick}) => {
     return (
         <S.NavButton onClick={onClick}>
             {children}
@@ -22,4 +22,4 @@ const Title:React.FC<NavButtonProps> = ({children, onClick}) => {
     )
 }
 
-export default Title
+export default NavButton

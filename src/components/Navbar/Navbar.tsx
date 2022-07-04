@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import React from "react";
-import NavButton from "../../Buttons/NavButton/NavButton";
-import MenuIcon from "../../Icons/MenuIcon";
-import HelpIcon from "../../Icons/HelpIcon";
-import GraphIcon from "../../Icons/GraphIcon";
-import SettingsIcon from "../../Icons/SettingsIcon";
+import NavButton from "../Buttons/NavButton/NavButton";
+import MenuIcon from "../Icons/MenuIcon";
+import HelpIcon from "../Icons/HelpIcon";
+import GraphIcon from "../Icons/GraphIcon";
+import SettingsIcon from "../Icons/SettingsIcon";
 
 interface NavbarProps  {
     children: JSX.Element
