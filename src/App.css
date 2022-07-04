@@ -55,6 +55,42 @@ html {
     background-color: black;
 }
 
+
+
+button {
+    appearance: auto;
+    writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: transparent;
+    border-image: initial;
+}
+
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+
 .app {
     display: block;
     height: 100vh;
@@ -64,5 +100,4 @@ html {
     overflow-y: hidden;
 
 }
-
 

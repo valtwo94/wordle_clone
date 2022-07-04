@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import React from "react";
+import React, {useContext} from "react";
 import Tile from "../../Tile/Tile";
+import {StoreContext} from "../../../store/store.context";
+import {observer} from "mobx-react";
 
 
 const S = {
@@ -26,13 +28,19 @@ const S = {
 
 
 const TileBoard: React.FC = () => {
+    const {globalStore} = useContext(StoreContext)
+
+
+
     return (
         <S.BoardContainer>
             <S.TileBoard>
-                {[...Array(30)].map((e, i) => <Tile key={i}/>)}
+                {globalStore.tileBoard.map((item, i) => {
+                    return <Tile key={i} keyData={item}/>
+                })}
             </S.TileBoard>
         </S.BoardContainer>
     )
 }
 
-export default TileBoard
+export default observer(TileBoard)

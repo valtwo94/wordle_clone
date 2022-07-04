@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import React from "react";
+import React, {useContext} from "react";
 import NavButton from "../Buttons/NavButton/NavButton";
 import MenuIcon from "../Icons/MenuIcon";
 import HelpIcon from "../Icons/HelpIcon";
 import GraphIcon from "../Icons/GraphIcon";
 import SettingsIcon from "../Icons/SettingsIcon";
+import {observer} from "mobx-react";
+import {StoreContext} from "../../store/store.context";
 
 interface NavbarProps  {
     children: JSX.Element
@@ -39,13 +41,15 @@ const S = {
 
 
 const NavBar:React.FC<NavbarProps> = ({children}) => {
+    const {globalStore} = useContext(StoreContext);
+
     return (
         <S.Navbar>
             <S.MenuLeft>
                 <NavButton onClick={() => {}}>
                     <MenuIcon/>
                 </NavButton>
-                <NavButton onClick={() => {}}>
+                <NavButton onClick={globalStore.toggleHelpButton}>
                     <HelpIcon/>
                 </NavButton>
             </S.MenuLeft>
@@ -62,4 +66,4 @@ const NavBar:React.FC<NavbarProps> = ({children}) => {
     )
 }
 
-export default NavBar
+export default observer(NavBar)
