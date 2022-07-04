@@ -8,7 +8,7 @@ import styled from "styled-components";
 import {observer} from "mobx-react";
 import {StoreContext} from "./store/store.context";
 import HelpModal from "./components/Modals/HelpModal";
-import {KeyAvailable} from "./constants/keys";
+import Toast from "./components/Toast/Toast";
 
 
 const S = {
@@ -28,10 +28,6 @@ const App = () => {
     const {globalStore} = useContext(StoreContext)
     console.log(globalStore.helpModalIsOpen)
 
-    const [enteredText, setEnteredText] = useState("");
-
-    useEffect(()=> {})
-
     // onKeyDown handler function
     const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.keyCode >= 65 && event.keyCode <= 90){
@@ -40,31 +36,14 @@ const App = () => {
         if(event.key === "Backspace"){
             globalStore.pressBackSpaceKey();
         }
-
-    };
-
-    // onKeyUp handler function
-    const keyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.code === "Escape") {
-            const confirm = window.confirm(
-                "Are you sure want to clear this text feild?"
-            );
-
-            if (confirm) {
-                setEnteredText("");
-            }
+        if(event.key === "Enter"){
+            globalStore.pressEnterKey()
         }
     };
 
-    // onKeyPress handler function
-    const keyPressHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        // Do something you like with "event"
-    };
-
-
     return (
         <div className="app" onKeyDown={keyDownHandler} tabIndex={0}>
-
+            <Toast message={globalStore.toastMessage} toastIsOpen={globalStore.toastIsOpen}/>
             <Navbar>
                 <Title>
                     Wordle

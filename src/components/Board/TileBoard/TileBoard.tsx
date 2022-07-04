@@ -36,7 +36,7 @@ const TileBoard: React.FC = () => {
         <S.BoardContainer>
             <S.TileBoard>
                 {globalStore.tileBoard.map((item, i) => {
-                    return <Tile key={i} keyData={item}/>
+                    return <Tile key={i} keyData={item} color={globalStore.answerBoard[i]}/>
                 })}
             </S.TileBoard>
         </S.BoardContainer>

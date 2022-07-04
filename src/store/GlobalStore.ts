@@ -1,5 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import Words from '../constants/words.json'
+import {Color} from "../model/Color";
+import {PlayingStatus} from "../model/PlayingStatus";
 
 
 class GlobalStore {
@@ -9,19 +11,22 @@ class GlobalStore {
     }
 
     helpModalIsOpen: boolean = false;
-    playingStatus: "Playing" | "Finished" = "Playing"
+    shareModalIsOpen: boolean = false;
+    playingStatus: PlayingStatus = PlayingStatus.playing
     currentIndex: number = 0;
     finishedRowIndex: number = 0;
-    answer: string[]  = ["", "", "", "", ""]
+    answer: string = "";
+    userAnswer: string = "";
+    answerBoard: any[] = Array(30);
     tileBoard: any[] = Array(30) ;
+    toastIsOpen: boolean = false;
+    toastMessage: string = ""
 
     fetchWordData (){
         const dataLength = Words.length;
         const randomNum = Math.floor(Math.random() * dataLength);
-        const word: string = Words[randomNum];
-        this.answer = word.split("")
+        this.answer = Words[randomNum];
         console.log(this.answer)
-        console.log(this.tileBoard)
     }
 
     reset() {
@@ -29,25 +34,64 @@ class GlobalStore {
     }
 
     pressLetterKey (key: string) {
-        if(this.currentIndex>=0 && this.currentIndex <5 && this.finishedRowIndex == 0){
+        if(this.currentIndex< this.finishedRowIndex * 5 + 5 && this.finishedRowIndex !== 6){
             this.tileBoard[this.currentIndex] = key
-            this.currentIndex ++
-            console.log(this.currentIndex)
-
+            this.userAnswer = this.userAnswer.concat(this.tileBoard[this.currentIndex])
+            console.log(this.userAnswer)
+            if(this.currentIndex < 29)this.currentIndex ++
         }
     }
 
      pressBackSpaceKey (){
-        const i = this.finishedRowIndex;
-        if(this.currentIndex>5*i && this.currentIndex <=5*(i+1) && this.finishedRowIndex == 0){
+        if(this.currentIndex>0  && this.currentIndex > this.finishedRowIndex * 5  && this.currentIndex <= this.finishedRowIndex * 5 + 5 && this.finishedRowIndex !==6){
             this.tileBoard[this.currentIndex -1] = undefined
+            this.userAnswer = this.userAnswer.slice(0, -1)
             this.currentIndex--
-            console.log(this.currentIndex)
+            console.log(this.userAnswer)
         }
 
     }
 
-    checkWordAvailable() {
+    pressEnterKey (){
+       this.checkAnswer();
+    }
+
+    checkAnswer() {
+        let correct = 0;
+        if(Words.includes(this.userAnswer) && this.finishedRowIndex !== 6){
+            if(this.currentIndex < 30 ){
+                let array = this.tileBoard.slice(this.finishedRowIndex * 5, this.finishedRowIndex*5 + 5);
+                console.log(array);
+                array.map((v, i) => {
+                    if(this.tileBoard[5*this.finishedRowIndex + i] === this.answer[i]) {
+                        correct ++;
+                        this.answerBoard[5*this.finishedRowIndex + i] =  Color.green
+                    }else if( this.answer.includes(this.tileBoard[i]) ){
+                        this.answerBoard[5*this.finishedRowIndex + i] =  Color.yellow
+                    }else{
+                        this.answerBoard[5*this.finishedRowIndex + i] = Color.gray
+                    }
+                })
+            }
+            if(this.finishedRowIndex  < 6 ) {
+                this.finishedRowIndex++
+                this.userAnswer = "";
+            }
+            this.toastMessage = ""
+            this.toastIsOpen = false
+            console.log(this.tileBoard)
+        }else{
+            this.toastMessage = "Not In Word List"
+            this.toastIsOpen = true
+            setTimeout(()  =>  {
+                this.toastIsOpen = false
+            }, 2000)
+
+        }
+
+        if(correct === 5){
+
+        }
 
     }
 
