@@ -30,13 +30,12 @@ const App = () => {
 
     // onKeyDown handler function
     const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if(event.keyCode >= 65 && event.keyCode <= 90){
+        const pattern = RegExp(/[^a-zA-Z]/);
+        if(event.keyCode >= 65 && event.keyCode <= 90 && !pattern.test(event.key)){
            globalStore.pressLetterKey(event.key)
-        }
-        if(event.key === "Backspace"){
+        }else if(event.key === "Backspace"){
             globalStore.pressBackSpaceKey();
-        }
-        if(event.key === "Enter"){
+        }else if(event.key === "Enter"){
             globalStore.pressEnterKey()
         }
     };
