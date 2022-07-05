@@ -50,7 +50,7 @@ class GlobalStore {
             this.userAnswer = this.userAnswer.concat(this.tileBoard[this.currentIndex])
             if(this.currentIndex < 29)this.currentIndex ++
         }
-        console.log(this.userAnswer)
+
     }
 
      pressBackSpaceKey = () => {
@@ -73,7 +73,7 @@ class GlobalStore {
                         correct ++;
                         this.colorBoard[5*this.finishedRowIndex + i] =  Color.green
                         Object.keys(this.keyBoard).forEach((key) => {
-                            if(key === this.userAnswer[i].toUpperCase()){
+                            if(key === this.userAnswer[i]){
                                 this.keyBoard[key] = Color.green;
                             }
 
@@ -81,14 +81,14 @@ class GlobalStore {
                     }else if( this.answer.includes(this.tileBoard[i]) ){
                         this.colorBoard[5*this.finishedRowIndex + i] =  Color.yellow
                         Object.keys(this.keyBoard).forEach((key) => {
-                            if(this.keyBoard[key] !== Color.green && key === this.userAnswer[i].toUpperCase()){
+                            if(this.keyBoard[key] !== Color.green && key === this.userAnswer[i]){
                                 this.keyBoard[key] = Color.yellow;
                             }
                         })
                     }else{
                         this.colorBoard[5*this.finishedRowIndex + i] = Color.gray
                         Object.keys(this.keyBoard).forEach((key) => {
-                            if(this.keyBoard[key] !== Color.green && this.keyBoard[key] !== Color.yellow && key === this.userAnswer[i].toUpperCase()){
+                            if(this.keyBoard[key] !== Color.green && this.keyBoard[key] !== Color.yellow && key === this.userAnswer[i]){
                                 this.keyBoard[key] = Color.gray;
                             }
                         })
@@ -117,7 +117,8 @@ class GlobalStore {
             this.finishedRowIndex = 6;
             this.shareModalIsOpen = true;
         }
-
+        console.log(this.tileBoard)
+        console.log(this.keyBoard)
     }
 
 

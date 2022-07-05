@@ -33,7 +33,7 @@ const S = {
 
 const KeyBoard: React.FC = () => {
     const {globalStore} = useContext(StoreContext)
-
+    console.log(globalStore.keyBoard)
     return (
         <S.KeyBoard>
             <S.KeyRow>
