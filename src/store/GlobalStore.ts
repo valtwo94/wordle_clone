@@ -29,7 +29,6 @@ class GlobalStore {
         const dataLength = Words.length;
         const randomNum = Math.floor(Math.random() * dataLength);
         this.answer = Words[randomNum];
-        console.log(this.answer)
     }
 
     reset = () =>  {
@@ -134,7 +133,6 @@ class GlobalStore {
         const attempt = this.attempt;
         const dateString: string = moment().format('날짜 YYYY-MM-DD hh:mm:ss')
         const output = "Wordle" + dateString + "  " + `${attempt}` + "/6 \n\n";
-        console.log(output)
         this.shareString = this.shareString.concat(output)
         this.colorBoard.map((v, i) => {
             if(i % 5 === 0){
