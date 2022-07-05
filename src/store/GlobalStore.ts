@@ -29,6 +29,7 @@ class GlobalStore {
         const dataLength = Words.length;
         const randomNum = Math.floor(Math.random() * dataLength);
         this.answer = Words[randomNum];
+        console.log(this.answer)
     }
 
     reset = () =>  {
@@ -117,8 +118,6 @@ class GlobalStore {
             this.finishedRowIndex = 6;
             this.shareModalIsOpen = true;
         }
-        console.log(this.tileBoard)
-        console.log(this.keyBoard)
     }
 
 
