@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import React from "react";
+import {observer} from "mobx-react";
 
 interface SKeyButtonProps {
     keyData: string
     onClick: () => void
+    color: string | undefined
 }
 
 const S = {
@@ -20,7 +22,7 @@ const S = {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      background-color: var(--key-bg);
+      background-color: ${props => props.color?props.color:"var(--key-bg)"} ;
       color: var(--key-text-color);
       flex: 1;
       display: flex;
@@ -42,8 +44,8 @@ const S = {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      background-color: var(--key-bg);
-      color: var(--key-text-color);
+      background-color: ${props => props.color?props.color:"var(--key-bg)"};
+      color: ${props => props.color?"white":"var(--key-text-color)"};
       flex: 1;
       display: flex;
       justify-content: center;
@@ -54,14 +56,14 @@ const S = {
 }
 
 
-const SKeyButton:React.FC<SKeyButtonProps> = ({keyData, onClick}) => {
+const SKeyButton:React.FC<SKeyButtonProps> = ({keyData, onClick, color}) => {
     return (
-        <S.SKeyButton onClick={onClick}>
-            <S.SKeyText>
+        <S.SKeyButton onClick={onClick} color={color}>
+            <S.SKeyText color={color}>
                 {keyData}
             </S.SKeyText>
         </S.SKeyButton>
     )
 }
 
-export default SKeyButton
+export default observer(SKeyButton)

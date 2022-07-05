@@ -2,6 +2,7 @@ import {makeAutoObservable} from "mobx";
 import Words from '../constants/words.json'
 import {Color} from "../model/Color";
 import {PlayingStatus} from "../model/PlayingStatus";
+import {KeyBoard} from "../constants/keys";
 
 
 class GlobalStore {
@@ -17,7 +18,8 @@ class GlobalStore {
     finishedRowIndex: number = 0;
     answer: string = "";
     userAnswer: string = "";
-    answerBoard: any[] = Array(30);
+    keyBoard: {[key: string]: string}  = KeyBoard
+    colorBoard: any[] = Array(30);
     tileBoard: any[] = Array(30) ;
     toastIsOpen: boolean = false;
     toastMessage: string = ""
@@ -27,6 +29,11 @@ class GlobalStore {
         const randomNum = Math.floor(Math.random() * dataLength);
         this.answer = Words[randomNum];
         console.log(this.answer)
+        console.log(this.keyBoard)
+    }
+
+    initializeKeyBoard (){
+
     }
 
     reset() {
@@ -61,17 +68,33 @@ class GlobalStore {
         if(Words.includes(this.userAnswer) && this.finishedRowIndex !== 6){
             if(this.currentIndex < 30 ){
                 let array = this.tileBoard.slice(this.finishedRowIndex * 5, this.finishedRowIndex*5 + 5);
-                console.log(array);
                 array.map((v, i) => {
                     if(this.tileBoard[5*this.finishedRowIndex + i] === this.answer[i]) {
                         correct ++;
-                        this.answerBoard[5*this.finishedRowIndex + i] =  Color.green
+                        this.colorBoard[5*this.finishedRowIndex + i] =  Color.green
+                        Object.keys(this.keyBoard).forEach((key) => {
+                            if(key === this.userAnswer[i].toUpperCase()){
+                                this.keyBoard[key] = Color.green;
+                            }
+
+                        })
                     }else if( this.answer.includes(this.tileBoard[i]) ){
-                        this.answerBoard[5*this.finishedRowIndex + i] =  Color.yellow
+                        this.colorBoard[5*this.finishedRowIndex + i] =  Color.yellow
+                        Object.keys(this.keyBoard).forEach((key) => {
+                            if(this.keyBoard[key] !== Color.green && key === this.userAnswer[i].toUpperCase()){
+                                this.keyBoard[key] = Color.yellow;
+                            }
+                        })
                     }else{
-                        this.answerBoard[5*this.finishedRowIndex + i] = Color.gray
+                        this.colorBoard[5*this.finishedRowIndex + i] = Color.gray
+                        Object.keys(this.keyBoard).forEach((key) => {
+                            if(this.keyBoard[key] !== Color.green && this.keyBoard[key] !== Color.yellow && key === this.userAnswer[i].toUpperCase()){
+                                this.keyBoard[key] = Color.gray;
+                            }
+                        })
                     }
                 })
+                console.log(this.keyBoard)
             }
             if(this.finishedRowIndex  < 6 ) {
                 this.finishedRowIndex++
@@ -90,10 +113,13 @@ class GlobalStore {
         }
 
         if(correct === 5){
-
+            this.finishedRowIndex = 6;
+            this.shareModalIsOpen = true;
         }
 
     }
+
+
 
     toggleHelpButton = () => this.helpModalIsOpen = !this.helpModalIsOpen
 

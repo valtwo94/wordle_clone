@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from "react";
+import {observer} from "mobx-react";
 
 interface MKeyButtonProps {
     keyData?: string
@@ -43,7 +44,7 @@ const S = {
 
 const MKeyButton:React.FC<MKeyButtonProps> = (props) => {
     return (
-        <S.MKeyButton>
+        <S.MKeyButton onClick={props.onClick}>
             {props.keyData}
             {props.icon}
         </S.MKeyButton>
@@ -53,4 +54,4 @@ const MKeyButton:React.FC<MKeyButtonProps> = (props) => {
 MKeyButton.defaultProps = defaultMKeyButtonProps
 
 
-export default MKeyButton
+export default observer(MKeyButton)

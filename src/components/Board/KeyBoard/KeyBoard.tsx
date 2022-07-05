@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {KeyRow1, KeyRow2, KeyRow3} from "../../../constants/keys";
 import SKeyButton from "../../Buttons/SKeyButton/SKeyButton";
 import MKeyButton from "../../Buttons/MKeyButton/MKeyButton";
 import BackSpaceIcon from "../../Icons/BackSpaceIcon";
+import {StoreContext} from "../../../store/store.context";
+import {observer} from "mobx-react";
 
 
 const S = {
@@ -30,23 +32,25 @@ const S = {
 
 
 const KeyBoard: React.FC = () => {
+    const {globalStore} = useContext(StoreContext)
+
     return (
         <S.KeyBoard>
             <S.KeyRow>
-                {KeyRow1.map((v, i) => <SKeyButton key={i} keyData={v} onClick={() => {}}/>)}
+                {KeyRow1.map((v, i) => <SKeyButton key={i} keyData={v} onClick={() => globalStore.pressLetterKey(v)} color={globalStore.keyBoard[v]} />)}
             </S.KeyRow>
             <S.KeyRow>
                 <S.KeyHalf/>
-                {KeyRow2.map((v, i) => <SKeyButton key={i} keyData={v} onClick={()=> {}}/>)}
+                {KeyRow2.map((v, i) => <SKeyButton key={i} keyData={v} onClick={()=> globalStore.pressLetterKey(v)} color={globalStore.keyBoard[v]}/>)}
                 <S.KeyHalf/>
             </S.KeyRow>
             <S.KeyRow>
-                <MKeyButton keyData={"Enter"}/>
-                {KeyRow3.map((v, i) => <SKeyButton key={i} keyData={v} onClick={()=> {}}/>)}
-                <MKeyButton icon={<BackSpaceIcon/>} onClick={() => {}}/>
+                <MKeyButton keyData={"Enter"} onClick={() => globalStore.pressEnterKey()}/>
+                {KeyRow3.map((v, i) => <SKeyButton key={i} keyData={v} onClick={()=> globalStore.pressLetterKey(v)} color={globalStore.keyBoard[v]}/>)}
+                <MKeyButton icon={<BackSpaceIcon/>}  onClick={() => globalStore.pressBackSpaceKey()}/>
             </S.KeyRow>
         </S.KeyBoard>
     )
 }
 
-export default KeyBoard
+export default observer(KeyBoard)

@@ -9,6 +9,7 @@ import {observer} from "mobx-react";
 import {StoreContext} from "./store/store.context";
 import HelpModal from "./components/Modals/HelpModal";
 import Toast from "./components/Toast/Toast";
+import ShareModal from "./components/Modals/ShareModal";
 
 
 const S = {
@@ -51,6 +52,7 @@ const App = () => {
             </Navbar>
             <S.GameContainer>
                 {globalStore.helpModalIsOpen?<HelpModal/>:<div/>}
+                {globalStore.shareModalIsOpen?<ShareModal/>:<div/>}
                 <TileBoard/>
                 <KeyBoard/>
             </S.GameContainer>
