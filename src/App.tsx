@@ -27,7 +27,6 @@ const S = {
 
 const App = () => {
     const {globalStore} = useContext(StoreContext)
-    console.log(globalStore.helpModalIsOpen)
 
     // onKeyDown handler function
     const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {

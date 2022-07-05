@@ -25,6 +25,7 @@ const S = {
       -webkit-animation: fadeout 2s; /* Safari and Chrome */
       -o-animation: fadeout 2s; /* Opera */
       animation-fill-mode: forwards;
+      z-index: 900;
     `,
     Message: styled.div`
       width: 100%;
@@ -32,6 +33,7 @@ const S = {
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 901;
     `
 }
 

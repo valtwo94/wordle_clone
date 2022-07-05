@@ -153,6 +153,12 @@ class GlobalStore {
 
         })
         await this.copyTextToClipboard();
+        this.shareString = ""
+        this.toastMessage = "Link Copied"
+        this.toastIsOpen = true
+        setTimeout(()  =>  {
+            this.toastIsOpen = false
+        }, 2000)
 
 
     }
