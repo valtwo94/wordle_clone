@@ -50,6 +50,7 @@ class GlobalStore {
             this.userAnswer = this.userAnswer.concat(this.tileBoard[this.currentIndex])
             if(this.currentIndex < 29)this.currentIndex ++
         }
+        console.log(this.userAnswer)
     }
 
      pressBackSpaceKey = () => {
