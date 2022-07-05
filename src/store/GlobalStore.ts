@@ -1,8 +1,8 @@
 import {makeAutoObservable} from "mobx";
 import Words from '../constants/words.json'
 import {Color} from "../model/Color";
-import {PlayingStatus} from "../model/PlayingStatus";
 import {KeyBoard} from "../constants/keys";
+import 'moment/locale/ko';
 
 
 class GlobalStore {
@@ -11,11 +11,11 @@ class GlobalStore {
         this.fetchWordData()
     }
 
-    helpModalIsOpen: boolean = false;
+    helpModalIsOpen: boolean = true;
     shareModalIsOpen: boolean = false;
-    playingStatus: PlayingStatus = PlayingStatus.playing
     currentIndex: number = 0;
     finishedRowIndex: number = 0;
+    attempt: number = 0;
     answer: string = "";
     userAnswer: string = "";
     keyBoard: {[key: string]: string}  = KeyBoard
@@ -23,50 +23,50 @@ class GlobalStore {
     tileBoard: any[] = Array(30) ;
     toastIsOpen: boolean = false;
     toastMessage: string = ""
+    shareString: string = ""
 
     fetchWordData (){
         const dataLength = Words.length;
         const randomNum = Math.floor(Math.random() * dataLength);
         this.answer = Words[randomNum];
         console.log(this.answer)
-        console.log(this.keyBoard)
     }
 
-    initializeKeyBoard (){
-
-    }
-
-    reset() {
+    reset = () =>  {
         this.tileBoard = Array(30);
+        this.currentIndex = 0;
+        this.finishedRowIndex = 0;
+        this.answer = ""
+        this.userAnswer = ""
+        this.fetchWordData();
+        this.keyBoard = KeyBoard
+        this.colorBoard = Array(30)
+        this.tileBoard = Array(30)
+        this.attempt = 0;
     }
 
-    pressLetterKey (key: string) {
+    pressLetterKey = (key: string)  => {
         if(this.currentIndex< this.finishedRowIndex * 5 + 5 && this.finishedRowIndex !== 6){
             this.tileBoard[this.currentIndex] = key
             this.userAnswer = this.userAnswer.concat(this.tileBoard[this.currentIndex])
-            console.log(this.userAnswer)
             if(this.currentIndex < 29)this.currentIndex ++
         }
     }
 
-     pressBackSpaceKey (){
+     pressBackSpaceKey = () => {
         if(this.currentIndex>0  && this.currentIndex > this.finishedRowIndex * 5  && this.currentIndex <= this.finishedRowIndex * 5 + 5 && this.finishedRowIndex !==6){
             this.tileBoard[this.currentIndex -1] = undefined
             this.userAnswer = this.userAnswer.slice(0, -1)
             this.currentIndex--
-            console.log(this.userAnswer)
         }
 
     }
 
-    pressEnterKey (){
-       this.checkAnswer();
-    }
-
-    checkAnswer() {
+    pressEnterKey = () =>  {
         let correct = 0;
         if(Words.includes(this.userAnswer) && this.finishedRowIndex !== 6){
             if(this.currentIndex < 30 ){
+                this.attempt++
                 let array = this.tileBoard.slice(this.finishedRowIndex * 5, this.finishedRowIndex*5 + 5);
                 array.map((v, i) => {
                     if(this.tileBoard[5*this.finishedRowIndex + i] === this.answer[i]) {
@@ -94,15 +94,16 @@ class GlobalStore {
                         })
                     }
                 })
-                console.log(this.keyBoard)
             }
             if(this.finishedRowIndex  < 6 ) {
                 this.finishedRowIndex++
                 this.userAnswer = "";
+                if(this.finishedRowIndex == 6){
+                    this.shareModalIsOpen = true
+                }
             }
             this.toastMessage = ""
             this.toastIsOpen = false
-            console.log(this.tileBoard)
         }else{
             this.toastMessage = "Not In Word List"
             this.toastIsOpen = true
@@ -120,8 +121,51 @@ class GlobalStore {
     }
 
 
-
     toggleHelpButton = () => this.helpModalIsOpen = !this.helpModalIsOpen
+
+
+    closeShareModal = () => {
+        this.reset()
+        this.shareModalIsOpen = false;
+    }
+
+    share = async () => {
+        const moment = require('moment')
+        const attempt = this.attempt;
+        const dateString: string = moment().format('날짜 YYYY-MM-DD hh:mm:ss')
+        const output = "Wordle" + dateString + "  " + `${attempt}` + "/6 \n\n";
+        console.log(output)
+        this.shareString = this.shareString.concat(output)
+        this.colorBoard.map((v, i) => {
+            if(i % 5 === 0){
+                this.shareString = this.shareString.concat("\n");
+            }
+            switch(v){
+                case Color.green:
+                    this.shareString = this.shareString.concat("🟩")
+                    break
+                case Color.yellow:
+                    this.shareString = this.shareString.concat("🟨")
+                    break
+                default:
+                    this.shareString =  this.shareString.concat("⬛")
+                    break
+            }
+
+
+        })
+        await this.copyTextToClipboard();
+
+
+    }
+
+    copyTextToClipboard = async () =>  {
+        if ('clipboard' in navigator) {
+            return await navigator.clipboard.writeText(this.shareString);
+        } else {
+            return document.execCommand('copy', true, this.shareString);
+        }
+    }
 
 
 }
